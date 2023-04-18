@@ -5,7 +5,7 @@ Library app for the university purposes
 Clone repo:
 
 ```
-git clone ...
+git clone https://github.com/Adamchello/library-app
 ```
 
 Install dependencies
