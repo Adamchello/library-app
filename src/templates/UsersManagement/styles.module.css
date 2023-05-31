@@ -1,0 +1,52 @@
+.container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.title {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.addButton {
+  display: inline-block;
+  margin-bottom: 20px;
+  padding: 10px 20px;
+  color: #fff;
+  background-color: #333;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table thead th {
+  padding: 10px;
+  background-color: #333;
+  color: #fff;
+}
+
+.table tbody td {
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+.table tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.link {
+  color: #333;
+  text-decoration: none;
+}
+
+.button {
+  padding: 5px 10px;
+  color: #fff;
+  background-color: #f00;
+  border: none;
+  border-radius: 5px;
+}

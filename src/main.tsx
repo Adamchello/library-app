@@ -3,6 +3,8 @@ import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import BookDetails from "./templates/BookDetails";
 import Homepage from "./templates/Homepage";
+import UsersManagement from "./templates/UsersManagement";
+import BookManagementView from "./templates/BookManagement";
 import "./index.css";
 
 const router = createBrowserRouter([
@@ -13,6 +15,14 @@ const router = createBrowserRouter([
   {
     path: "/books/:bookId",
     element: <BookDetails />,
+  },
+  {
+    path: "/users",
+    element: <UsersManagement />,
+  },
+  {
+    path: "/books",
+    element: <BookManagementView />,
   },
 ]);
 
