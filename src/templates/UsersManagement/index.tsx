@@ -1,4 +1,6 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import Modal from "react-modal";
 import { useTable } from "react-table";
 import styles from "./styles.module.css";
 
@@ -15,16 +17,48 @@ const columns = [
   { Header: "Role", accessor: "role" },
 ] as const;
 
+type FormValues = {
+  username: string;
+  password: string;
+  role: string;
+};
+
+const initalState = { username: "", password: "", role: "" };
+
 const UsersManagement = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formData, setFormData] = useState<FormValues>(initalState);
+
+  const { register, handleSubmit, reset } = useForm<FormValues>();
+
+  const onSubmit = (data: FormValues) => {
+    console.log(data);
+    setIsModalOpen(false);
+  };
+
+  const openModal = (rowData: FormValues) => {
+    setFormData(rowData);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setFormData(initalState);
+    reset();
+  };
+
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ columns, data });
 
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Admin User Management</h1>
-      <Link to="/addUser" className={styles.addButton}>
+      <button
+        className={styles.addButton}
+        onClick={() => openModal(initalState)}
+      >
         Add User
-      </Link>
+      </button>
       <table className={styles.table} {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup) => (
@@ -46,12 +80,14 @@ const UsersManagement = () => {
                   <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
                 ))}
                 <td>
-                  <Link
-                    to={`/editUser/${row.values.username}`}
+                  <button
+                    onClick={() =>
+                      openModal({ ...row.values, password: "" } as FormValues)
+                    }
                     className={styles.link}
                   >
                     Edit
-                  </Link>
+                  </button>
                 </td>
                 <td>
                   <button className={styles.button}>Delete</button>
@@ -61,6 +97,59 @@ const UsersManagement = () => {
           })}
         </tbody>
       </table>
+
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={closeModal}
+        contentLabel="User Form"
+        className={styles.modalContainer}
+        overlayClassName={styles.modalOverlay}
+      >
+        <div className={styles.modalContent}>
+          <h2 className={styles.modalTitle}>Edit User</h2>
+          <form onSubmit={handleSubmit(onSubmit)} className={styles.modalForm}>
+            <div>
+              <label className={styles.modalFormLabel}>Username</label>
+              <input
+                type="text"
+                defaultValue={formData?.username}
+                {...register("username", { required: true })}
+                className={styles.modalFormInput}
+              />
+            </div>
+            <div>
+              <label className={styles.modalFormLabel}>Password</label>
+              <input
+                type="text"
+                defaultValue={formData?.password}
+                {...register("password", { required: true })}
+                className={styles.modalFormInput}
+              />
+            </div>
+            <div>
+              <label className={styles.modalFormLabel}>Role</label>
+              <input
+                type="text"
+                defaultValue={formData?.role}
+                {...register("role", { required: true })}
+                className={styles.modalFormInput}
+              />
+            </div>
+            <div className={styles.modalFormButtonContainer}>
+              <button type="submit" className={styles.modalFormButton}>
+                Save
+              </button>
+              <button
+                type="button"
+                onClick={closeModal}
+                className={`${styles.modalFormButton} ${styles.modalFormCancelButton}`}
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </Modal>
     </div>
   );
 };
