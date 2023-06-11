@@ -1,17 +1,9 @@
 import { useState } from "react";
-import { useLocalStorage } from "usehooks-ts";
 import { useTable } from "react-table";
 import { v4 as uuidv4 } from "uuid";
 import styles from "./styles.module.css";
 import AddUserModal from "./AddUserModal";
-
-const data = [
-  { id: uuidv4(), username: "user5", password: "example1", role: "admin" },
-  { id: uuidv4(), username: "user2", password: "example1", role: "librarian" },
-  { id: uuidv4(), username: "user1", password: "example1", role: "customer" },
-  { id: uuidv4(), username: "user3", password: "example1", role: "customer" },
-  { id: uuidv4(), username: "user4", password: "example1", role: "customer" },
-];
+import { useUsers } from "../../hooks/useUsers";
 
 const columns = [
   { Header: "Username", accessor: "username" },
@@ -27,12 +19,18 @@ type User = {
 };
 
 const UsersManagement = () => {
-  const [users, setUsers] = useLocalStorage("users", data);
+  const [users, setUsers] = useUsers();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const filteredUsers = users.filter((user) => user.role !== "admin");
 
   const addUser = (data: Omit<User, "id">) => {
     setIsModalOpen(false);
+    const foundUser = users.find((user) => user.username === data.username);
+    if (foundUser) {
+      alert("user with this username already exists");
+      return;
+    }
+
     const newUser = { ...data, id: uuidv4() };
     setUsers([...users, newUser]);
   };

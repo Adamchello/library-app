@@ -1,5 +1,8 @@
 import { useForm } from "react-hook-form";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 import styles from "./styles.module.css";
+import { useUsers } from "../../hooks/useUsers";
 
 type LoginFormValues = {
   username: string;
@@ -7,6 +10,9 @@ type LoginFormValues = {
 };
 
 function LoginPage() {
+  const [users] = useUsers();
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -14,8 +20,17 @@ function LoginPage() {
   } = useForm<LoginFormValues>();
 
   const onSubmit = (data: LoginFormValues) => {
-    console.log(data);
-    // implement login logic here
+    const foundUser = users.find(
+      (user) =>
+        user.username === data.username && user.password === data.password
+    );
+    if (!foundUser) {
+      alert("user not found");
+      return;
+    }
+    Cookies.set("isLogged", "true");
+    alert("logged");
+    navigate("/");
   };
 
   return (
