@@ -5,6 +5,7 @@ import BookDetails from "./templates/BookDetails";
 import Homepage from "./templates/Homepage";
 import UsersManagement from "./templates/UsersManagement";
 import BookManagementView from "./templates/BookManagement";
+import LoginPage from "./templates/Login";
 import "./index.css";
 
 const router = createBrowserRouter([
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
   {
     path: "/users",
     element: <UsersManagement />,
+  },
+  {
+    path: "/login",
+    element: <LoginPage />,
   },
   {
     path: "/books",
