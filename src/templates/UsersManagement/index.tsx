@@ -1,62 +1,61 @@
 import { useState } from "react";
-import { useForm } from "react-hook-form";
-import Modal from "react-modal";
+import { useLocalStorage } from "usehooks-ts";
 import { useTable } from "react-table";
+import { v4 as uuidv4 } from "uuid";
 import styles from "./styles.module.css";
+import AddUserModal from "./AddUserModal";
 
 const data = [
-  { username: "user1", role: "customer" },
-  { username: "user2", role: "librarian" },
-  { username: "user3", role: "customer" },
-  { username: "user4", role: "customer" },
-  { username: "user5", role: "admin" },
+  { id: uuidv4(), username: "user5", password: "example1", role: "admin" },
+  { id: uuidv4(), username: "user2", password: "example1", role: "librarian" },
+  { id: uuidv4(), username: "user1", password: "example1", role: "customer" },
+  { id: uuidv4(), username: "user3", password: "example1", role: "customer" },
+  { id: uuidv4(), username: "user4", password: "example1", role: "customer" },
 ];
 
 const columns = [
   { Header: "Username", accessor: "username" },
+  { Header: "Password", accessor: "password" },
   { Header: "Role", accessor: "role" },
 ] as const;
 
-type FormValues = {
+type User = {
+  id: string;
   username: string;
   password: string;
   role: string;
 };
 
-const initalState = { username: "", password: "", role: "" };
-
 const UsersManagement = () => {
+  const [users, setUsers] = useLocalStorage("users", data);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [formData, setFormData] = useState<FormValues>(initalState);
+  const filteredUsers = users.filter((user) => user.role !== "admin");
 
-  const { register, handleSubmit, reset } = useForm<FormValues>();
-
-  const onSubmit = (data: FormValues) => {
-    console.log(data);
+  const addUser = (data: Omit<User, "id">) => {
     setIsModalOpen(false);
+    const newUser = { ...data, id: uuidv4() };
+    setUsers([...users, newUser]);
   };
 
-  const openModal = (rowData: FormValues) => {
-    setFormData(rowData);
+  const openModal = () => {
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
-    setFormData(initalState);
-    reset();
+  };
+
+  const deleteUser = (userToDelete: User) => {
+    setUsers(users.filter((user) => user.id !== userToDelete.id));
   };
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({ columns, data });
+    useTable({ columns, data: filteredUsers });
 
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Admin User Management</h1>
-      <button
-        className={styles.addButton}
-        onClick={() => openModal(initalState)}
-      >
+      <button className={styles.addButton} onClick={() => openModal()}>
         Add User
       </button>
       <table className={styles.table} {...getTableProps()}>
@@ -66,7 +65,6 @@ const UsersManagement = () => {
               {headerGroup.headers.map((column) => (
                 <th {...column.getHeaderProps()}>{column.render("Header")}</th>
               ))}
-              <th>Edit</th>
               <th>Delete</th>
             </tr>
           ))}
@@ -74,6 +72,8 @@ const UsersManagement = () => {
         <tbody {...getTableBodyProps()}>
           {rows.map((row) => {
             prepareRow(row);
+            const rowValues = row.original as User;
+
             return (
               <tr {...row.getRowProps()}>
                 {row.cells.map((cell) => (
@@ -81,16 +81,11 @@ const UsersManagement = () => {
                 ))}
                 <td>
                   <button
-                    onClick={() =>
-                      openModal({ ...row.values, password: "" } as FormValues)
-                    }
-                    className={styles.link}
+                    className={styles.button}
+                    onClick={() => deleteUser(rowValues)}
                   >
-                    Edit
+                    Delete
                   </button>
-                </td>
-                <td>
-                  <button className={styles.button}>Delete</button>
                 </td>
               </tr>
             );
@@ -98,58 +93,11 @@ const UsersManagement = () => {
         </tbody>
       </table>
 
-      <Modal
-        isOpen={isModalOpen}
-        onRequestClose={closeModal}
-        contentLabel="User Form"
-        className={styles.modalContainer}
-        overlayClassName={styles.modalOverlay}
-      >
-        <div className={styles.modalContent}>
-          <h2 className={styles.modalTitle}>Edit User</h2>
-          <form onSubmit={handleSubmit(onSubmit)} className={styles.modalForm}>
-            <div>
-              <label className={styles.modalFormLabel}>Username</label>
-              <input
-                type="text"
-                defaultValue={formData?.username}
-                {...register("username", { required: true })}
-                className={styles.modalFormInput}
-              />
-            </div>
-            <div>
-              <label className={styles.modalFormLabel}>Password</label>
-              <input
-                type="text"
-                defaultValue={formData?.password}
-                {...register("password", { required: true })}
-                className={styles.modalFormInput}
-              />
-            </div>
-            <div>
-              <label className={styles.modalFormLabel}>Role</label>
-              <input
-                type="text"
-                defaultValue={formData?.role}
-                {...register("role", { required: true })}
-                className={styles.modalFormInput}
-              />
-            </div>
-            <div className={styles.modalFormButtonContainer}>
-              <button type="submit" className={styles.modalFormButton}>
-                Save
-              </button>
-              <button
-                type="button"
-                onClick={closeModal}
-                className={`${styles.modalFormButton} ${styles.modalFormCancelButton}`}
-              >
-                Cancel
-              </button>
-            </div>
-          </form>
-        </div>
-      </Modal>
+      <AddUserModal
+        isModalOpen={isModalOpen}
+        closeModal={closeModal}
+        addUser={addUser}
+      />
     </div>
   );
 };
