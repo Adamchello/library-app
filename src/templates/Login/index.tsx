@@ -3,6 +3,7 @@ import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import styles from "./styles.module.css";
 import { useUsers } from "../../hooks/useUsers";
+import { useCurrentUser } from "../../hooks/useCurrentUser";
 
 type LoginFormValues = {
   username: string;
@@ -11,6 +12,7 @@ type LoginFormValues = {
 
 function LoginPage() {
   const [users] = useUsers();
+  const [_, setCurrentUser] = useCurrentUser();
   const navigate = useNavigate();
 
   const {
@@ -29,6 +31,7 @@ function LoginPage() {
       return;
     }
     Cookies.set("isLogged", "true");
+    setCurrentUser(foundUser);
     alert("logged");
     navigate("/");
   };

@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTable } from "react-table";
 import { v4 as uuidv4 } from "uuid";
 import styles from "./styles.module.css";
 import AddUserModal from "./AddUserModal";
 import { useUsers } from "../../hooks/useUsers";
+import { useCurrentUser } from "../../hooks/useCurrentUser";
+import { useNavigate } from "react-router-dom";
 
 const columns = [
   { Header: "Username", accessor: "username" },
@@ -20,8 +22,16 @@ type User = {
 
 const UsersManagement = () => {
   const [users, setUsers] = useUsers();
+  const [currentUser] = useCurrentUser();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
+
   const filteredUsers = users.filter((user) => user.role !== "admin");
+
+  useEffect(() => {
+    const isLoggedAdmin = currentUser.role === "admin";
+    if (!isLoggedAdmin) navigate("/");
+  }, [currentUser]);
 
   const addUser = (data: Omit<User, "id">) => {
     setIsModalOpen(false);

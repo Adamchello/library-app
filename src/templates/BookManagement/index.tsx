@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useTable } from "react-table";
 import styles from "./styles.module.css";
 import { useBooks } from "../../hooks/useBooks";
 import AddBookModal from "./AddBookModal";
 import EditBookModal from "./EditBookModal";
+import { useCurrentUser } from "../../hooks/useCurrentUser";
 
 const columns = [
   {
@@ -33,7 +34,15 @@ type Book = {
 const BookManagementView = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [chosenBookId, setChosenBookId] = useState("");
+  const [currentUser] = useCurrentUser();
   const [books, setBooks] = useBooks();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const isPermitted =
+      currentUser.role === "admin" || currentUser.role === "librarian";
+    if (!isPermitted) navigate("/");
+  }, [currentUser]);
 
   const addBook = (data: Omit<Book, "id">) => {
     setIsModalOpen(false);
