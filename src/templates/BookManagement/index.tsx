@@ -1,41 +1,11 @@
+import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 import { Link } from "react-router-dom";
 import { useTable } from "react-table";
 import styles from "./styles.module.css";
-
-const data = [
-  {
-    title: "Book1",
-    author: "Author1",
-    genre: "Genre1",
-    year: "2000",
-    status: "Available",
-    image: "https://via.placeholder.com/100",
-  },
-  {
-    title: "Book2",
-    author: "Author2",
-    genre: "Genre2",
-    year: "2001",
-    status: "Borrowed",
-    image: "https://via.placeholder.com/100",
-  },
-  {
-    title: "Book3",
-    author: "Author3",
-    genre: "Genre3",
-    year: "2002",
-    status: "Available",
-    image: "https://via.placeholder.com/100",
-  },
-  {
-    title: "Book4",
-    author: "Author4",
-    genre: "Genre4",
-    year: "2003",
-    status: "Borrowed",
-    image: "https://via.placeholder.com/100",
-  },
-];
+import { useBooks } from "../../hooks/useBooks";
+import AddBookModal from "./AddBookModal";
+import EditBookModal from "./EditBookModal";
 
 const columns = [
   {
@@ -47,21 +17,47 @@ const columns = [
   },
   { Header: "Title", accessor: "title" },
   { Header: "Author", accessor: "author" },
-  { Header: "Genre", accessor: "genre" },
-  { Header: "Year", accessor: "year" },
+  { Header: "Description", accessor: "description" },
   { Header: "Status", accessor: "status" },
 ] as const;
 
+type Book = {
+  id: string;
+  title: string;
+  author: string;
+  description: string;
+  status: string;
+  image: string;
+};
+
 const BookManagementView = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [chosenBookId, setChosenBookId] = useState("");
+  const [books, setBooks] = useBooks();
+
+  const addBook = (data: Omit<Book, "id">) => {
+    setIsModalOpen(false);
+    const newBook = { ...data, id: uuidv4() };
+    setBooks([...books, newBook]);
+  };
+
+  const deleteBook = (bookToDelete: Book) => {
+    setBooks(books.filter((book) => book.id !== bookToDelete.id));
+  };
+
+  const editBook = (bookToEdit: Book) => {
+    setBooks(
+      books.map((book) => (book.id === bookToEdit.id ? bookToEdit : book))
+    );
+  };
+
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({ columns, data });
+    useTable({ columns, data: books });
 
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Book Management</h1>
-      <Link className={styles.link} to="/addBook">
-        Add Book
-      </Link>
+      <button onClick={() => setIsModalOpen(true)}>Add Book</button>
       <table {...getTableProps()} className={styles.book_table}>
         <thead>
           {headerGroups.map((headerGroup) => (
@@ -77,27 +73,44 @@ const BookManagementView = () => {
         <tbody {...getTableBodyProps()}>
           {rows.map((row) => {
             prepareRow(row);
+            const rowValues = row.original as Book;
+
             return (
               <tr {...row.getRowProps()}>
                 {row.cells.map((cell) => (
                   <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
                 ))}
                 <td>
-                  <Link
-                    className={styles.link}
-                    to={`/editBook/${row.values.title}`}
+                  <button
+                    className={styles.delete_button}
+                    onClick={() => setChosenBookId(rowValues.id)}
                   >
                     Edit
-                  </Link>
+                  </button>
                 </td>
                 <td>
-                  <button className={styles.delete_button}>Delete</button>
+                  <button
+                    className={styles.delete_button}
+                    onClick={() => deleteBook(rowValues)}
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             );
           })}
         </tbody>
       </table>
+      <AddBookModal
+        isModalOpen={isModalOpen}
+        closeModal={() => setIsModalOpen(false)}
+        addBook={addBook}
+      />
+      <EditBookModal
+        chosenBookId={chosenBookId}
+        closeModal={() => setChosenBookId("")}
+        editBook={editBook}
+      />
     </div>
   );
 };
