@@ -16,9 +16,9 @@
 - User can login (for 5 points cookies must be used) | Zrobione
 - Add/update/delete books | Zrobione
 - Books list (for 5 points search must be added)
-- Book details
-- Book reservation
-- Borrow/return book
+- Book details | Zrobione
+- Book reservation | Zrobione
+- Borrow/return book | Zrobione
 - Book history
 - User history
 

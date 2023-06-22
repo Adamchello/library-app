@@ -29,8 +29,9 @@ const UsersManagement = () => {
   const filteredUsers = users.filter((user) => user.role !== "admin");
 
   useEffect(() => {
-    const isLoggedAdmin = currentUser.role === "admin";
-    if (!isLoggedAdmin) navigate("/");
+    const isAccessForbidden =
+      currentUser === null || currentUser.role !== "admin";
+    if (isAccessForbidden) navigate("/");
   }, [currentUser]);
 
   const addUser = (data: Omit<User, "id">) => {
@@ -61,52 +62,67 @@ const UsersManagement = () => {
     useTable({ columns, data: filteredUsers });
 
   return (
-    <div className={styles.container}>
-      <h1 className={styles.title}>Admin User Management</h1>
-      <button className={styles.addButton} onClick={() => openModal()}>
-        Add User
-      </button>
-      <table className={styles.table} {...getTableProps()}>
-        <thead>
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps()}>{column.render("Header")}</th>
-              ))}
-              <th>Delete</th>
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {rows.map((row) => {
-            prepareRow(row);
-            const rowValues = row.original as User;
-
-            return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map((cell) => (
-                  <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+    <>
+      <div className={styles.container}>
+        <h1 className={styles.title}>Admin User Management</h1>
+        <table className={styles.table} {...getTableProps()}>
+          <thead>
+            {headerGroups.map((headerGroup) => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => (
+                  <th {...column.getHeaderProps()}>
+                    {column.render("Header")}
+                  </th>
                 ))}
-                <td>
-                  <button
-                    className={styles.button}
-                    onClick={() => deleteUser(rowValues)}
-                  >
-                    Delete
-                  </button>
-                </td>
+                <th>Delete</th>
               </tr>
-            );
-          })}
-        </tbody>
-      </table>
+            ))}
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {rows.map((row) => {
+              prepareRow(row);
+              const rowValues = row.original as User;
 
+              return (
+                <tr {...row.getRowProps()}>
+                  {row.cells.map((cell) => (
+                    <td
+                      {...cell.getCellProps()}
+                      data-label={cell.column.Header}
+                    >
+                      {cell.render("Cell")}
+                    </td>
+                  ))}
+                  <td data-label="Delete">
+                    <button
+                      className={styles.button}
+                      onClick={() => deleteUser(rowValues)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+            <tr className={styles.addUserRow}>
+              <td colSpan={headerGroups[0].headers.length + 1}>
+                <button
+                  className={styles.addButton}
+                  onClick={() => openModal()}
+                >
+                  Add New User
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <AddUserModal
         isModalOpen={isModalOpen}
         closeModal={closeModal}
         addUser={addUser}
       />
-    </div>
+    </>
   );
 };
 

@@ -41,8 +41,56 @@
   border: none;
   padding: 5px 10px;
   cursor: pointer;
+  text-decoration: none;
+}
+
+.addButton {
+  display: block;
+  border: none;
+  width: 100%;
+  padding: 10px;
+  color: #333;
+  text-decoration: none;
+  background-color: #fff;
+  font-weight: 700;
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
 }
 
 .delete_button:hover {
   background-color: #ddd;
+}
+
+@media (max-width: 600px) {
+  .book_table thead {
+    display: none;
+  }
+
+  .book_table tbody tr {
+    display: block;
+    margin-bottom: 30px;
+  }
+
+  .book_table tbody td {
+    display: block;
+    text-align: right;
+    padding-left: 50%;
+    position: relative;
+  }
+
+  .book_table tbody td:before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0;
+    width: 45%;
+    padding-left: 15px;
+    font-weight: bold;
+    text-align: left;
+  }
+
+  .addBookRow td {
+    padding: 10px;
+    padding-left: 0 !important;
+  }
 }

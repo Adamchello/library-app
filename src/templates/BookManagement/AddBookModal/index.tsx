@@ -15,6 +15,7 @@ type Book = {
 const roleOptions = [
   { value: "available", label: "Available" },
   { value: "borrowed", label: "Borrowed" },
+  { value: "reserved", label: "Reserved", isDisabled: true },
 ];
 
 const AddBookModal = ({
