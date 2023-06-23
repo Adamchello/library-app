@@ -1,0 +1,134 @@
+:root {
+  --background-color: #ffe2cc;
+  --primary-color: #ff6e00;
+  --text-color: #6c514e;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.centeredSection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2em;
+  text-align: center;
+  flex-direction: column;
+  max-width: 700px;
+  margin: auto;
+}
+
+.searchResults {
+  margin-top: 30px;
+}
+
+@media (min-width: 768px) {
+  .searchResults {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 1.5em;
+  }
+}
+
+@media (min-width: 992px) {
+  .searchResults {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.noBooksFound {
+  text-align: center;
+}
+
+.searchSection {
+  padding: 2em;
+  padding-top: 0px;
+  align-items: flex-start;
+}
+
+.searchContainer {
+  display: flex;
+  align-items: stretch;
+  font-size: 0;
+}
+
+.searchInput,
+.searchButton {
+  font-size: 16px;
+}
+
+.searchInput {
+  flex-grow: 1;
+  padding: 15px;
+  border-radius: 25px 0 0 25px;
+  border: 2px solid var(--primary-color);
+  border-right: none;
+  background-color: white;
+  height: auto;
+  box-sizing: border-box;
+  color: #000;
+}
+
+.searchButton {
+  margin-left: 0;
+  border-radius: 0 25px 25px 0;
+  padding: 15px 20px;
+  border: 2px solid var(--primary-color);
+  border-left: none;
+  background-color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: auto;
+  box-sizing: border-box;
+  width: auto;
+  color: #fff;
+}
+
+@media (max-width: 480px) {
+  .searchContainer {
+    width: 100%;
+  }
+
+  .searchButton {
+    font-size: 18px;
+    padding: 15px 25px;
+  }
+}
+
+.bookCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.5em;
+  text-align: center;
+}
+
+.bookCard img {
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 0.5em;
+}
+
+.bookCard .bookTitle {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 0.25em;
+}
+
+.bookCard .bookAuthor {
+  color: #888;
+}

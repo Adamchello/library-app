@@ -9,27 +9,48 @@ import LoginPage from "./templates/Login";
 import BookDetails from "./templates/BookDetails";
 
 import "./index.css";
+import { Layout } from "./components/Layout";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Homepage />,
+    element: (
+      <Layout>
+        <Homepage />
+      </Layout>
+    ),
   },
   {
     path: "/books/:bookId",
-    element: <BookDetails />,
+    element: (
+      <Layout>
+        <BookDetails />
+      </Layout>
+    ),
   },
   {
     path: "/users",
-    element: <UsersManagement />,
+    element: (
+      <Layout>
+        <UsersManagement />
+      </Layout>
+    ),
   },
   {
     path: "/login",
-    element: <LoginPage />,
+    element: (
+      <Layout>
+        <LoginPage />
+      </Layout>
+    ),
   },
   {
     path: "/books",
-    element: <BookManagementView />,
+    element: (
+      <Layout>
+        <BookManagementView />
+      </Layout>
+    ),
   },
 ]);
 

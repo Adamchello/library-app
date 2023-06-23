@@ -1,0 +1,133 @@
+:root {
+  --background-color: #ffe2cc;
+  --primary-color: #ff6e00;
+  --text-color: #6c514e;
+}
+
+.linkButton {
+  background-color: transparent;
+  color: #fff;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.logoAndTitle a {
+  display: flex;
+  align-items: center;
+  color: #fff;
+  text-decoration: none;
+}
+
+.logoAndTitle img {
+  width: 50px;
+  height: 50px;
+  margin-right: 1em;
+}
+
+.logoAndTitle h1 {
+  margin: 0;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1em;
+  background-color: var(--primary-color);
+  position: relative;
+}
+
+.hamburger {
+  display: none;
+  cursor: pointer;
+}
+
+.navItems {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navItems ul {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navItems ul li {
+  margin: 0 1em;
+}
+
+.navRight {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
+.signInBtn {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+/* Updated CSS for responsive design */
+@media (max-width: 768px) {
+  .hamburger {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 40px;
+    height: 40px;
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    transition: background-color 0.3s;
+  }
+
+  .hamburger:hover {
+    background-color: #fec574;
+  }
+
+  .navItems {
+    display: none;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background-color: var(--primary-color);
+    padding: 0 1em;
+  }
+
+  .navItems.active {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .navItems ul {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .navItems ul li {
+    margin: 0 10px;
+  }
+
+  .navItems ul li button {
+    background-color: transparent;
+    color: var(--text-color);
+    border: none;
+    box-shadow: none;
+    padding: 10px 20px;
+    margin: 0;
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+
+  .navItems ul li button:hover {
+    color: #fec574;
+  }
+}

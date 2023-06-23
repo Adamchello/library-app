@@ -32,7 +32,6 @@ function LoginPage() {
     }
     Cookies.set("isLogged", "true");
     setCurrentUser(foundUser);
-    alert("logged");
     navigate("/");
   };
 
