@@ -8,6 +8,7 @@ import AddBookModal from "./AddBookModal";
 import EditBookModal from "./EditBookModal";
 import { useCurrentUser } from "../../hooks/useCurrentUser";
 import { useItemsHistory } from "../../hooks/useItemsHistory";
+import UserHistoryModal from "./BookHistoryModal";
 
 const columns = [
   {
@@ -39,7 +40,8 @@ type Book = {
 const BookManagementView = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [chosenBookId, setChosenBookId] = useState("");
-  const { updateBookHistory, updateUserHistory } = useItemsHistory();
+  const [chosenBookHistoryId, setChosenBookHistoryId] = useState("");
+  const [_, addToHistory] = useItemsHistory();
   const [currentUser] = useCurrentUser();
   const [books, setBooks] = useBooks();
   const navigate = useNavigate();
@@ -63,7 +65,7 @@ const BookManagementView = () => {
 
     setBooks([...books, newBook]);
 
-    updateUserHistory({
+    addToHistory({
       action: "created book",
       userId: currentUser.id,
       bookId: newBook.id,
@@ -81,14 +83,8 @@ const BookManagementView = () => {
       books.map((book) => (book.id === bookToEdit.id ? bookToEdit : book))
     );
 
-    updateBookHistory({
-      action: "edit",
-      userId: currentUser.id,
-      bookId: bookToEdit.id,
-    });
-
-    updateUserHistory({
-      action: "edited book",
+    addToHistory({
+      action: "book edited",
       userId: currentUser.id,
       bookId: bookToEdit.id,
     });
@@ -151,7 +147,7 @@ const BookManagementView = () => {
                   <td data-label="History">
                     <button
                       className={styles.delete_button}
-                      onClick={() => setChosenBookId(rowValues.id)}
+                      onClick={() => setChosenBookHistoryId(rowValues.id)}
                     >
                       History
                     </button>
@@ -168,7 +164,7 @@ const BookManagementView = () => {
               );
             })}
             <tr className={styles.addBookRow}>
-              <td colSpan={headerGroups[0].headers.length + 3}>
+              <td colSpan={headerGroups[0].headers.length + 4}>
                 <button
                   className={styles.addButton}
                   onClick={() => setIsModalOpen(true)}
@@ -189,6 +185,10 @@ const BookManagementView = () => {
         chosenBookId={chosenBookId}
         closeModal={() => setChosenBookId("")}
         editBook={editBook}
+      />
+      <UserHistoryModal
+        chosenBookId={chosenBookHistoryId}
+        closeModal={() => setChosenBookHistoryId("")}
       />
     </>
   );

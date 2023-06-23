@@ -1,0 +1,92 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+
+@media (max-width: 800px) {
+  .container {
+    padding: 10px;
+  }
+}
+
+.bookInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.bookCover {
+  width: 100%;
+  max-width: 250px;
+  object-fit: cover;
+  margin-bottom: 20px;
+}
+
+.bookTitle {
+  margin: 0;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.bookAuthor {
+  margin: 0;
+  margin-bottom: 20px;
+  text-align: center;
+  color: grey;
+}
+
+@media (max-width: 600px) {
+  .bookAuthor {
+    font-size: 18px;
+  }
+}
+
+.bookDescription {
+  text-align: justify;
+  line-height: 1.6;
+  margin-bottom: 36px;
+}
+
+@media (max-width: 600px) {
+  .bookDescription {
+    font-size: 16px;
+  }
+}
+
+.reserveButton {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+  transition: background-color 0.3s;
+}
+
+.reserveButton:hover {
+  background-color: #0056b3;
+}
+
+.reserveButton:active {
+  background-color: #004085;
+}
+
+.reserveButton:disabled {
+  background-color: #aaa;
+  cursor: default;
+}
+
+@media (max-width: 600px) {
+  .reserveButton {
+    font-size: 16px;
+    padding: 8px 16px;
+  }
+}

@@ -40,7 +40,7 @@
   border: 1px solid #ddd;
 }
 
-.table tbody tr:nth-child(even) {
+.table tbody tr {
   background-color: #f2f2f2;
 }
 
@@ -50,6 +50,10 @@
   background-color: #f00;
   border: none;
   border-radius: 5px;
+}
+
+.addUserRow td {
+  padding: 0px !important;
 }
 
 @media (max-width: 600px) {
@@ -77,9 +81,5 @@
     padding-left: 15px;
     font-weight: bold;
     text-align: left;
-  }
-
-  .addUserRow td {
-    padding-left: 0px !important;
   }
 }
