@@ -42,7 +42,9 @@ function Header() {
             <ul>
               {currentUser === null ? (
                 <li>
-                  <Link to="/login">Log In</Link>
+                  <Link to="/login">
+                    <button className={styles.linkButton}>Log in</button>
+                  </Link>
                 </li>
               ) : (
                 <>
