@@ -1,9 +1,11 @@
-import { useForm } from "react-hook-form";
-import Modal from "react-modal";
+import { FormProvider, useForm } from "react-hook-form";
 import Select from "react-select";
 import styles from "./styles.module.css";
 import { useBooks } from "../../../hooks/useBooks";
 import { useEffect } from "react";
+import Button from "../../../components/Button";
+import FormInput from "../../../components/FormInput";
+import Modal from "../../../components/Modal";
 
 type Book = {
   id: string;
@@ -30,7 +32,8 @@ const EditBookModal = ({
   editBook: (user: Book) => void;
 }) => {
   const [books] = useBooks();
-  const { register, handleSubmit, setValue, watch, reset } = useForm<Book>();
+  const methods = useForm<Book>();
+  const { register, handleSubmit, setValue, watch, reset } = methods;
 
   const onSubmit = (user: Book) => {
     editBook(user);
@@ -49,47 +52,15 @@ const EditBookModal = ({
   return (
     <Modal
       isOpen={chosenBookId.length > 0}
-      onRequestClose={closeModal}
-      contentLabel="User Form"
-      ariaHideApp={false}
-      className={styles.modalContainer}
-      overlayClassName={styles.modalOverlay}
+      closeModal={closeModal}
+      title="Edit a book"
     >
-      <div className={styles.modalContent}>
-        <h2 className={styles.modalTitle}>Edit User</h2>
+      <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)} className={styles.modalForm}>
-          <div>
-            <label className={styles.modalFormLabel}>Image</label>
-            <input
-              type="text"
-              {...register("image", { required: true })}
-              className={styles.modalFormInput}
-            />
-          </div>
-          <div>
-            <label className={styles.modalFormLabel}>Title</label>
-            <input
-              type="text"
-              {...register("title", { required: true })}
-              className={styles.modalFormInput}
-            />
-          </div>
-          <div>
-            <label className={styles.modalFormLabel}>Author</label>
-            <input
-              type="text"
-              {...register("author", { required: true })}
-              className={styles.modalFormInput}
-            />
-          </div>
-          <div>
-            <label className={styles.modalFormLabel}>Description</label>
-            <input
-              type="text"
-              {...register("description", { required: true })}
-              className={styles.modalFormInput}
-            />
-          </div>
+          <FormInput label="Image" name="image" />
+          <FormInput label="Title" name="title" />
+          <FormInput label="Author" name="author" />
+          <FormInput label="Description" name="description" />
           <div>
             <label className={styles.modalFormLabel}>Status</label>
             <Select
@@ -102,19 +73,11 @@ const EditBookModal = ({
             />
           </div>
           <div className={styles.modalFormButtonContainer}>
-            <button type="submit" className={styles.modalFormButton}>
-              Save
-            </button>
-            <button
-              type="button"
-              onClick={closeModal}
-              className={`${styles.modalFormButton} ${styles.modalFormCancelButton}`}
-            >
-              Cancel
-            </button>
+            <Button type="submit" label="Save" />
+            <Button variant="secondary" onClick={closeModal} label="Cancel" />
           </div>
         </form>
-      </div>
+      </FormProvider>
     </Modal>
   );
 };

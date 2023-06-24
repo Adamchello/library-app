@@ -1,0 +1,44 @@
+.basicButton {
+  margin-top: 20px;
+  padding: 10px 20px;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+  transition: background-color 0.3s;
+}
+
+.primaryButton {
+  background-color: #ff6e00;
+}
+
+.primaryButton:hover {
+  background-color: #e06100;
+}
+
+.primaryButton:active {
+  background-color: #a34700;
+}
+
+.primaryButton:disabled {
+  background-color: #ffba85;
+  cursor: default;
+}
+
+.secondaryButton {
+  background-color: #525252;
+}
+
+.secondaryButton:hover {
+  background-color: #707070;
+}
+
+.secondaryButton:active {
+  background-color: #858585;
+}
+
+.secondaryButton:disabled {
+  background-color: #aaa;
+  cursor: default;
+}
