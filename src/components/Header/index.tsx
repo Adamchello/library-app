@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Cookies from "js-cookie";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./styles.module.css";
 import { useCurrentUser } from "../../hooks/useCurrentUser";
@@ -17,6 +18,7 @@ function Header() {
   const logOut = () => {
     setCurrentUser(null);
     navigate("/");
+    Cookies.remove("isLogged");
   };
 
   return (
@@ -37,7 +39,9 @@ function Header() {
           </button>
 
           <div
-            className={`${styles.navItems} ${mobileMenuOpen ? "active" : ""}`}
+            className={`${styles.navItems} ${
+              mobileMenuOpen ? styles.active : styles.deactived
+            }`}
           >
             <ul>
               {currentUser === null ? (
