@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { useCurrentUser } from "../../hooks/useCurrentUser";
 import { useItemsHistory } from "../../hooks/useItemsHistory";
 import styles from "./styles.module.css";
+import Button from "../../components/Button";
 
 const BookPage = () => {
   const [books, setBooks] = useBooks();
@@ -46,8 +47,6 @@ const BookPage = () => {
     });
   };
 
-  console.log(foundBook);
-
   return (
     <div className={styles.container}>
       <div className={styles.bookInfo}>
@@ -64,13 +63,11 @@ const BookPage = () => {
             Only logged in users with role customer can reserve book
           </strong>
         )}
-        <button
-          className={styles.reserveButton}
+        <Button
           disabled={!canReserveBook || foundBook.status === "reserved"}
           onClick={handleReserve}
-        >
-          Reserve
-        </button>
+          label="Reserve"
+        />
       </div>
     </div>
   );

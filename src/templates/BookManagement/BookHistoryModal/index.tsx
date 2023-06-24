@@ -1,7 +1,7 @@
-import Modal from "react-modal";
-import styles from "./styles.module.css";
 import { useItemsHistory } from "../../../hooks/useItemsHistory";
 import { useUsers } from "../../../hooks/useUsers";
+import Button from "../../../components/Button";
+import Modal from "../../../components/Modal";
 
 const UserHistoryModal = ({
   chosenBookId,
@@ -20,13 +20,10 @@ const UserHistoryModal = ({
   return (
     <Modal
       isOpen={chosenBookId !== ""}
-      onRequestClose={closeModal}
-      ariaHideApp={false}
-      className={styles.modalContainer}
-      overlayClassName={styles.modalOverlay}
+      closeModal={closeModal}
+      title="User history"
     >
-      <div className={styles.modalContent}>
-        <h2>User history</h2>
+      <>
         {chosenBookHistory.length > 0 ? (
           <ul>
             {chosenBookHistory.map((item, index) => (
@@ -39,8 +36,8 @@ const UserHistoryModal = ({
         ) : (
           <p>No history</p>
         )}
-        <button onClick={closeModal}>Close modal</button>
-      </div>
+        <Button variant="secondary" label="Close modal" onClick={closeModal} />
+      </>
     </Modal>
   );
 };

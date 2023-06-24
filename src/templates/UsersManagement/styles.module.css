@@ -50,6 +50,7 @@
   background-color: #f00;
   border: none;
   border-radius: 5px;
+  cursor: pointer;
 }
 
 .addUserRow td {

@@ -1,7 +1,9 @@
-import { useForm } from "react-hook-form";
-import Modal from "react-modal";
+import { FormProvider, useForm } from "react-hook-form";
 import Select from "react-select";
 import styles from "./styles.module.css";
+import Modal from "../../../components/Modal";
+import FormInput from "../../../components/FormInput";
+import Button from "../../../components/Button";
 
 type User = {
   username: string;
@@ -23,7 +25,8 @@ const AddUserModal = ({
   closeModal: () => void;
   addUser: (user: User) => void;
 }) => {
-  const { register, handleSubmit, setValue, watch, reset } = useForm<User>();
+  const methods = useForm<User>();
+  const { register, handleSubmit, setValue, watch, reset } = methods;
 
   const onSubmit = (user: User) => {
     addUser(user);
@@ -34,33 +37,11 @@ const AddUserModal = ({
   register("role");
 
   return (
-    <Modal
-      isOpen={isModalOpen}
-      onRequestClose={closeModal}
-      contentLabel="User Form"
-      ariaHideApp={false}
-      className={styles.modalContainer}
-      overlayClassName={styles.modalOverlay}
-    >
-      <div className={styles.modalContent}>
-        <h2 className={styles.modalTitle}>Edit User</h2>
+    <Modal isOpen={isModalOpen} closeModal={closeModal} title="Add User">
+      <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)} className={styles.modalForm}>
-          <div>
-            <label className={styles.modalFormLabel}>Username</label>
-            <input
-              type="text"
-              {...register("username", { required: true })}
-              className={styles.modalFormInput}
-            />
-          </div>
-          <div>
-            <label className={styles.modalFormLabel}>Password</label>
-            <input
-              type="text"
-              {...register("password", { required: true })}
-              className={styles.modalFormInput}
-            />
-          </div>
+          <FormInput name="username" label="Username" />
+          <FormInput name="password" label="Password" />
           <div>
             <label className={styles.modalFormLabel}>Role</label>
             <Select
@@ -73,19 +54,11 @@ const AddUserModal = ({
             />
           </div>
           <div className={styles.modalFormButtonContainer}>
-            <button type="submit" className={styles.modalFormButton}>
-              Save
-            </button>
-            <button
-              type="button"
-              onClick={closeModal}
-              className={`${styles.modalFormButton} ${styles.modalFormCancelButton}`}
-            >
-              Cancel
-            </button>
+            <Button type="submit" label="Add" />
+            <Button variant="secondary" onClick={closeModal} label="Cancel" />
           </div>
         </form>
-      </div>
+      </FormProvider>
     </Modal>
   );
 };

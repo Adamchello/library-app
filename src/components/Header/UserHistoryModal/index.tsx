@@ -1,7 +1,7 @@
-import Modal from "react-modal";
-import styles from "./styles.module.css";
 import { useItemsHistory } from "../../../hooks/useItemsHistory";
 import { useCurrentUser } from "../../../hooks/useCurrentUser";
+import Button from "../../Button";
+import Modal from "../../Modal";
 
 const UserHistoryModal = ({
   isModalOpen,
@@ -20,15 +20,8 @@ const UserHistoryModal = ({
   );
 
   return (
-    <Modal
-      isOpen={isModalOpen}
-      onRequestClose={closeModal}
-      ariaHideApp={false}
-      className={styles.modalContainer}
-      overlayClassName={styles.modalOverlay}
-    >
-      <div className={styles.modalContent}>
-        <h2>User history</h2>
+    <Modal isOpen={isModalOpen} closeModal={closeModal} title="User history">
+      <>
         {currentUserHistory.length > 0 ? (
           <ul>
             {currentUserHistory.map((item, index) => (
@@ -40,8 +33,8 @@ const UserHistoryModal = ({
         ) : (
           <p>No history</p>
         )}
-        <button onClick={closeModal}>Close modal</button>
-      </div>
+        <Button variant="secondary" label="Close modal" onClick={closeModal} />
+      </>
     </Modal>
   );
 };

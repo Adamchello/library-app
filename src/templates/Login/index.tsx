@@ -1,9 +1,11 @@
-import { useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import styles from "./styles.module.css";
 import { useUsers } from "../../hooks/useUsers";
 import { useCurrentUser } from "../../hooks/useCurrentUser";
+import FormInput from "../../components/FormInput";
+import Button from "../../components/Button";
 
 type LoginFormValues = {
   username: string;
@@ -15,11 +17,12 @@ function LoginPage() {
   const [_, setCurrentUser] = useCurrentUser();
   const navigate = useNavigate();
 
+  const methods = useForm<LoginFormValues>();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginFormValues>();
+  } = methods;
 
   const onSubmit = (data: LoginFormValues) => {
     const foundUser = users.find(
@@ -38,29 +41,13 @@ function LoginPage() {
   return (
     <div className={styles.loginContainer}>
       <h2 className={styles.title}>Login</h2>
-      <form onSubmit={handleSubmit(onSubmit)} className={styles.loginForm}>
-        <input
-          {...register("username", { required: true })}
-          className={styles.inputField}
-          type="text"
-          placeholder="Username"
-        />
-        {errors.username && (
-          <p className={styles.errorMessage}>Username is required</p>
-        )}
-
-        <input
-          {...register("password", { required: true })}
-          className={styles.inputField}
-          type="password"
-          placeholder="Password"
-        />
-        {errors.password && (
-          <p className={styles.errorMessage}>Password is required</p>
-        )}
-
-        <input type="submit" value="Login" className={styles.loginButton} />
-      </form>
+      <FormProvider {...methods}>
+        <form onSubmit={handleSubmit(onSubmit)} className={styles.loginForm}>
+          <FormInput label="Username" name="username" />
+          <FormInput label="Password" name="password" type="password" />
+          <Button type="submit" label="Login" />
+        </form>
+      </FormProvider>
     </div>
   );
 }
